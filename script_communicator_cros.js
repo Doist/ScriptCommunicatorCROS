@@ -1,13 +1,11 @@
 ScriptCommunicator = {
 
     /*
-     * on_error is only supported on modern browsers
-     * IE 8+, Chrome, Firefox, Safari
-     *
-     * Opera isn't supported.
+     * on_error is only supported on modern browsers:
+     *      IE 8+, Chrome, Firefox, Safari
      */
     sourceJavaScript: function(uri, on_success, on_error) {
-        var xhr = ScriptCommunicator.createCORSRequest('GET', uri);
+        var xhr = ScriptCommunicator.request = ScriptCommunicator.createCORSRequest('GET', uri);
 
         if(xhr) {
             xhr.onload = function() {
@@ -55,6 +53,8 @@ ScriptCommunicator = {
             xhr.open(method, url, true);
         } else if (typeof XDomainRequest != "undefined") {
             xhr = new XDomainRequest();
+            xhr.onprogress = function() { }
+            xhr.timeout = 120000;
             xhr.open(method, url);
         } else {
             xhr = null;
